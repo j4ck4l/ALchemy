@@ -1,0 +1,49 @@
+{
+  "id": "d07bacd8-f80b-439a-8949-78f47be82a92",
+  "name": "ALchemy - Tests",
+  "publisher": "Vjeko.com",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "ALchemy - Turning AL code into SOLID gold (Tests)",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [
+    {
+      "id": "502298ef-3c45-47e5-87dd-d5e0d599ebd9",
+      "name": "ALchemy",
+      "publisher": "Vjeko.com",
+      "version": "1.0.0.0"
+    },
+    {
+      "id": "5d86850b-0d76-4eca-bd7b-951ad998e997",
+      "name": "Tests-TestLibraries",
+      "publisher": "Microsoft",
+      "version": "1.0.0.0"
+    },
+    {
+      "id": "23de40a6-dfe8-4f80-80db-d70f83ce8caf",
+      "publisher": "Microsoft",
+      "name": "Test Runner",
+      "version": "1.0.0.0"
+    }
+  ],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "22.0.0.0",
+  "idRanges": [
+    {
+      "from": 60150,
+      "to": 60199
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "12.0",
+  "features": ["NoImplicitWith"]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "502298ef-3c45-47e5-87dd-d5e0d599ebd9",
+  "name": "ALchemy",
+  "publisher": "Vjeko.com",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "ALchemy - Turning AL code into SOLID gold",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "22.0.0.0",
+  "idRanges": [
+    {
+      "from": 60100,
+      "to": 60149
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "12.0",
+  "features": [
+    "NoImplicitWith"
+  ],
+  "internalsVisibleTo": [
+    {
+      "id": "d07bacd8-f80b-439a-8949-78f47be82a92",
+      "name": "ALchemy - Tests",
+      "publisher": "Vjeko.com"    
+    }
+  ]
+}
