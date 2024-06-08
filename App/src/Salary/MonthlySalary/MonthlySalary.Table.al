@@ -46,15 +46,26 @@ table 60101 MonthlySalary
 
     procedure CalculateMonthlySalaries()
     var
-        Employee: Record "Employee";
-        MonthlySalary: Record MonthlySalary;
         AtDate: Date;
     begin
         AtDate := CalcDate('<CM>', WorkDate());
+        DeleteMonthlySalaries(AtDate);
+        CalculateMonthlySalaries(AtDate);
+    end;
 
+    internal procedure DeleteMonthlySalaries(AtDate: Date)
+    var
+        MonthlySalary: Record MonthlySalary;
+    begin
         MonthlySalary.SetRange(Date, AtDate);
         MonthlySalary.DeleteAll(false);
+    end;
 
+    internal procedure CalculateMonthlySalaries(AtDate: Date)
+    var
+        Employee: Record Employee;
+        MonthlySalary: Record MonthlySalary;
+    begin
         Employee.SetRange(Status, Employee.Status::Active);
         if Employee.FindSet() then
             repeat
