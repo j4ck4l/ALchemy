@@ -2,7 +2,7 @@ namespace ALchemy;
 
 using Microsoft.HumanResources.Employee;
 
-codeunit 60101 SalaryCalculatorFixed implements ISalaryCalculator
+codeunit 60118 DefaultBaseSalaryCalculator implements IBaseSalaryCalculator
 {
     procedure CalculateBaseSalary(Employee: Record Employee; Setup: Record SalarySetup) Salary: Decimal;
     var
@@ -22,18 +22,5 @@ codeunit 60101 SalaryCalculatorFixed implements ISalaryCalculator
                     Salary := DepartmentSenioritySetup.BaseSalary;
             end;
         end;
-    end;
-
-    procedure CalculateBonus(Employee: Record Employee; Setup: Record SalarySetup; Salary: Decimal; StartingDate: Date; EndingDate: Date): Decimal;
-    begin
-    end;
-
-    procedure CalculateIncentive(Employee: Record Employee; Setup: Record SalarySetup; Salary: Decimal; AtDate: Date) Incentive: Decimal;
-    var
-        YearsOfTenure: Integer;
-    begin
-        Setup.TestField(YearlyIncentivePct);
-        YearsOfTenure := Round((AtDate - Employee."Employment Date") / 365, 1, '<');
-        Incentive := Salary * (YearsOfTenure * Setup.YearlyIncentivePct) / 100;
     end;
 }

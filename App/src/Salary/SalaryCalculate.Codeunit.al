@@ -14,31 +14,27 @@ codeunit 60100 SalaryCalculate
 
     internal procedure CalculateSalary(var Employee: Record Employee; Setup: Record SalarySetup; AtDate: Date) Result: Record MonthlySalary
     var
-        Calculator: Interface ISalaryCalculator;
-        SeniorityBonus: Interface ISeniorityBonus;
+        BaseSalaryCalculator: Interface IBaseSalaryCalculator;
+        SeniorityScheme: Interface ISeniorityScheme;
+        BonusCalculator: Interface IBonusCalculator;
+        IncentiveCalculator: Interface IIncentiveCalculator;
         Salary: Decimal;
         Bonus: Decimal;
         Incentive: Decimal;
         StartingDate: Date;
         EndingDate: Date;
     begin
-        Calculator := Employee.SalaryType;
-        SeniorityBonus := Employee.Seniority;
+        BaseSalaryCalculator := Employee.SalaryType;
+        SeniorityScheme := Employee.Seniority;
+        BonusCalculator := SeniorityScheme.GetBonusCalculator(Employee);
+        IncentiveCalculator := SeniorityScheme.GetIncentiveCalculator(Employee);
 
         StartingDate := CalcDate('<CM+1D-1M>', AtDate);
         EndingDate := CalcDate('<CM>', AtDate);
 
-        Salary := Calculator.CalculateBaseSalary(Employee, Setup);
-
-        if SeniorityBonus.ProvidesBonusCalculation() then
-            Bonus := SeniorityBonus.CalculateBonus(Employee, AtDate)
-        else
-            Bonus := Calculator.CalculateBonus(Employee, Setup, Salary, StartingDate, EndingDate);
-
-        if SeniorityBonus.ProvidesIncentiveCalculation() then
-            Incentive := SeniorityBonus.CalculateIncentive(Employee, AtDate)
-        else
-            Incentive := Calculator.CalculateIncentive(Employee, Setup, Salary, AtDate);
+        Salary := BaseSalaryCalculator.CalculateBaseSalary(Employee, Setup);
+        Bonus := BonusCalculator.CalculateBonus(Employee, Setup, Salary, StartingDate, EndingDate, AtDate);
+        Incentive := IncentiveCalculator.CalculateIncentive(Employee, Setup, Salary, AtDate);
 
         Result.EmployeeNo := Employee."No.";
         Result.Date := AtDate;

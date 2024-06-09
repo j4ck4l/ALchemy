@@ -4,13 +4,9 @@ using Microsoft.HumanResources.Employee;
 using Microsoft.Finance.GeneralLedger.Account;
 using Microsoft.Finance.GeneralLedger.Ledger;
 
-codeunit 60108 SalaryCalculatorPerformance implements ISalaryCalculator
+codeunit 60108 BonusCalculatorPerformance implements IBonusCalculator
 {
-    procedure CalculateBaseSalary(Employee: Record Employee; Setup: Record SalarySetup) Salary: Decimal;
-    begin
-    end;
-
-    procedure CalculateBonus(Employee: Record Employee; Setup: Record SalarySetup; Salary: Decimal; StartingDate: Date; EndingDate: Date) Bonus: Decimal;
+    procedure CalculateBonus(Employee: Record Employee; Setup: Record SalarySetup; Salary: Decimal; StartingDate: Date; EndingDate: Date; AtDate: Date) Bonus: Decimal;
     var
         GLAccount: Record "G/L Account";
         GLEntry: Record "G/L Entry";
@@ -33,9 +29,5 @@ codeunit 60108 SalaryCalculatorPerformance implements ISalaryCalculator
         Profit := Income - Expense;
         if (Profit > 0) then
             Bonus := (Employee.PerformanceBonusPct / 100) * Profit;
-    end;
-
-    procedure CalculateIncentive(Employee: Record Employee; Setup: Record SalarySetup; Salary: Decimal; AtDate: Date) Incentive: Decimal;
-    begin
     end;
 }
