@@ -9,9 +9,13 @@ codeunit 60114 TeamIncentive implements IIncentiveCalculator, IRewardsExtractor
     procedure CalculateIncentive(Employee: Record Employee; Setup: Record SalarySetup; Salary: Decimal; AtDate: Date) Incentive: Decimal;
     var
         TeamController: Codeunit TeamController;
-        this: Codeunit TeamIncentive; // TODO BC25: This will become a built-in keyword; replace with it
     begin
-        Incentive := TeamController.CalculateSubordinates(Employee."No.", Employee.TeamIncentivePct, AtDate, this);
+        Incentive := CalculateIncentive(Employee, AtDate, TeamController, this);
+    end;
+
+    procedure CalculateIncentive(Employee: Record Employee; AtDate: Date; Controller: Interface ITeamController; RewardsExtractor: Interface IRewardsExtractor) Bonus: Decimal;
+    begin
+        exit(Controller.CalculateSubordinates(Employee."No.", Employee.TeamIncentivePct, AtDate, RewardsExtractor, Controller));
     end;
 
     internal procedure ExtractRewardComponent(MonthlySalary: Record MonthlySalary): Decimal

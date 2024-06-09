@@ -188,11 +188,36 @@ tableextension 60100 EmployeeExt extends Employee
 
     }
 
+    #region SalaryCalculate factory
+
+    var
+        _salaryCalculate: Interface ISalaryCalculate;
+        _implemented_SalaryCalculate: Boolean;
+
+    local procedure GetSalaryCalculate(): Interface ISalaryCalculate
+    var
+        SalaryCalculate: Codeunit SalaryCalculate;
+    begin
+        if _implemented_SalaryCalculate then
+            exit(_salaryCalculate);
+
+        exit(SalaryCalculate);
+    end;
+
+    internal procedure Implement(Implementation: Interface ISalaryCalculate)
+    begin
+        _salaryCalculate := Implementation;
+        _implemented_SalaryCalculate := true;
+    end;
+
+    #endregion
+
     internal procedure CalculateSalary(AtDate: Date) Salary: Record MonthlySalary
     var
-        Calculate: Codeunit SalaryCalculate;
+        Calculate: Interface ISalaryCalculate;
     begin
-        exit(Calculate.CalculateSalary(Rec, AtDate))
+        Calculate := GetSalaryCalculate();
+        exit(Calculate.CalculateSalary(Rec, AtDate));
     end;
 
     internal procedure PreviewSalary()
@@ -204,14 +229,31 @@ tableextension 60100 EmployeeExt extends Employee
         Page.RunModal(Page::MonthlySalaryPreview, TempMonthlySalary);
     end;
 
+    #region GetWorkHoursProvider
+
+    var
+        _implemented_WorkHoursProvider: Boolean;
+        _workHoursProvider: Interface IWorkHoursProvider;
+
     internal procedure GetWorkHoursProvider(): Interface IWorkHoursProvider
     var
         BCWorkHoursProvider: Codeunit BCWorkHoursProvider;
         TimetrackerWorkHoursProvider: Codeunit TimetrackerWorkHoursProvider;
     begin
+        if _implemented_WorkHoursProvider then
+            exit(_workHoursProvider);
+
         if Rec.TimetrackerEmployeeId <> '' then
             exit(TimetrackerWorkHoursProvider)
         else
             exit(BCWorkHoursProvider);
     end;
+
+    internal procedure Implement(Implementation: Interface IWorkHoursProvider)
+    begin
+        _workHoursProvider := Implementation;
+        _implemented_WorkHoursProvider := true;
+    end;
+
+    #endregion
 }

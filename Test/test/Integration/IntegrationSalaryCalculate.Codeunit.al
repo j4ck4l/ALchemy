@@ -1,3 +1,25 @@
+/*
+These tests are integration tests. Most of them are still valid and useful, but some of them are redundant and in a real-life
+project they should eventually be removed.
+
+The purpose of integration tests is to show that the solution as a whole works. When the code is not SOLID, the integration
+tests need to cover all possible path, and this causes a lot of redundancy in code coverage, requires a lot of setup, a lot
+of "givens", and writing those tests takes more time because many times those "givens" aren't obvious and need to be figured
+out during the test writing.
+
+When code is SOLID, we have already covered all the logical paths in the unit tests, and the integration tests are only there
+as a final check to show that components are correctly integrated. They mostly need to cover only the "happy path". In this
+test codeunit, there are several "happy path" tests (because they cover all possible paths through code, and the code itself
+contains many "happy paths", e.g. staff with undertime, lead with overtime, trainee, etc.). In a real-life project, we would
+keep only the most comprehensive "happy path" test, and leave out all the rest - your unit tests + that one integration test
+prove that your solution as a whole works.
+
+In this workshop project, the only reason why these tests are kept here is to show the difference in efficiency between unit
+tests (which are many, but have almost no redundancy in coverage and are all very fast), and integration tests (which for
+non-SOLID code are either still relatively numerous and relatively slow, or are very few and cover only a small percentage
+of the code).
+*/
+
 namespace ALchemy;
 
 using Microsoft.Projects.TimeSheet;
@@ -8,7 +30,7 @@ using Microsoft.Foundation.NoSeries;
 using Microsoft.HumanResources.Employee;
 using Microsoft.Projects.Resources.Resource;
 
-codeunit 60152 "Test - Salary"
+codeunit 60152 "Integration - Salary Calculate"
 {
     Subtype = Test;
     TestPermissions = Disabled;
@@ -767,17 +789,17 @@ codeunit 60152 "Test - Salary"
     var
         LibraryTestInitialize: Codeunit "Library - Test Initialize";
     begin
-        LibraryTestInitialize.OnTestInitialize(Codeunit::"Test - Salary");
+        LibraryTestInitialize.OnTestInitialize(Codeunit::"Integration - Salary Calculate");
 
         if IsInitialized then exit;
 
-        LibraryTestInitialize.OnBeforeTestSuiteInitialize(Codeunit::"Test - Salary");
+        LibraryTestInitialize.OnBeforeTestSuiteInitialize(Codeunit::"Integration - Salary Calculate");
 
         InitializeSetup();
         InitializeTimeSheetNos();
 
         IsInitialized := true;
         Commit();
-        LibraryTestInitialize.OnAfterTestSuiteInitialize(Codeunit::"Test - Salary");
+        LibraryTestInitialize.OnAfterTestSuiteInitialize(Codeunit::"Integration - Salary Calculate");
     end;
 }

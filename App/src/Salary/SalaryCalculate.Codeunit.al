@@ -2,7 +2,7 @@ namespace ALchemy;
 
 using Microsoft.HumanResources.Employee;
 
-codeunit 60100 SalaryCalculate
+codeunit 60100 SalaryCalculate implements ISalaryCalculate
 {
     procedure CalculateSalary(var Employee: Record Employee; AtDate: Date) Result: Record MonthlySalary
     var
@@ -18,17 +18,23 @@ codeunit 60100 SalaryCalculate
         SeniorityScheme: Interface ISeniorityScheme;
         BonusCalculator: Interface IBonusCalculator;
         IncentiveCalculator: Interface IIncentiveCalculator;
-        Salary: Decimal;
-        Bonus: Decimal;
-        Incentive: Decimal;
-        StartingDate: Date;
-        EndingDate: Date;
     begin
         BaseSalaryCalculator := Employee.SalaryType;
         SeniorityScheme := Employee.Seniority;
         BonusCalculator := SeniorityScheme.GetBonusCalculator(Employee);
         IncentiveCalculator := SeniorityScheme.GetIncentiveCalculator(Employee);
 
+        Result := CalculateSalary(Employee, Setup, AtDate, BaseSalaryCalculator, BonusCalculator, IncentiveCalculator);
+    end;
+
+    internal procedure CalculateSalary(var Employee: Record Employee; Setup: Record SalarySetup; AtDate: Date; BaseSalaryCalculator: Interface IBaseSalaryCalculator; BonusCalculator: Interface IBonusCalculator; IncentiveCalculator: Interface IIncentiveCalculator) Result: Record MonthlySalary
+    var
+        Salary: Decimal;
+        Bonus: Decimal;
+        Incentive: Decimal;
+        StartingDate: Date;
+        EndingDate: Date;
+    begin
         StartingDate := CalcDate('<CM+1D-1M>', AtDate);
         EndingDate := CalcDate('<CM>', AtDate);
 

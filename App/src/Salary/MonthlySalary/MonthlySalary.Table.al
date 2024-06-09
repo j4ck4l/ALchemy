@@ -44,33 +44,39 @@ table 60101 MonthlySalary
         }
     }
 
+    #region Controller factory
+    var
+        _controller: Interface IMonthlySalaryController;
+        _implemented_Controller: Boolean;
+
+    local procedure GetController(): Interface IMonthlySalaryController
+    var
+        Controller: Codeunit MonthlySalaryController;
+    begin
+        if not _implemented_Controller then
+            Implement(Controller);
+
+        exit(_controller)
+    end;
+
+    internal procedure Implement(Controller: Interface IMonthlySalaryController)
+    begin
+        _controller := Controller;
+        _implemented_Controller := true;
+    end;
+
+
+    #endregion
+
     procedure CalculateMonthlySalaries()
     var
+        Controller: Interface IMonthlySalaryController;
         AtDate: Date;
     begin
+        Controller := GetController();
+
         AtDate := CalcDate('<CM>', WorkDate());
-        DeleteMonthlySalaries(AtDate);
-        CalculateMonthlySalaries(AtDate);
-    end;
-
-    internal procedure DeleteMonthlySalaries(AtDate: Date)
-    var
-        MonthlySalary: Record MonthlySalary;
-    begin
-        MonthlySalary.SetRange(Date, AtDate);
-        MonthlySalary.DeleteAll(false);
-    end;
-
-    internal procedure CalculateMonthlySalaries(AtDate: Date)
-    var
-        Employee: Record Employee;
-        MonthlySalary: Record MonthlySalary;
-    begin
-        Employee.SetRange(Status, Employee.Status::Active);
-        if Employee.FindSet() then
-            repeat
-                MonthlySalary := Employee.CalculateSalary(AtDate);
-                MonthlySalary.Insert(false);
-            until Employee.Next() = 0;
+        Controller.DeleteMonthlySalaries(Rec, AtDate);
+        Controller.CalculateMonthlySalaries(Rec, AtDate);
     end;
 }

@@ -1,10 +1,14 @@
+/*
+Make sure to read the comments on integration testing in `IntegrationSalaryCalculate.Codeunit.al`.
+*/
+
 namespace ALchemy;
 
 using Microsoft.CRM.Team;
 using Microsoft.HumanResources.Employee;
 using Microsoft.Projects.Resources.Resource;
 
-codeunit 60153 "Test - Salaries"
+codeunit 60153 "Integration - Salaries"
 {
     Subtype = Test;
     TestPermissions = Disabled;
@@ -104,17 +108,17 @@ codeunit 60153 "Test - Salaries"
     var
         LibraryTestInitialize: Codeunit "Library - Test Initialize";
     begin
-        LibraryTestInitialize.OnTestInitialize(Codeunit::"Test - Salaries");
+        LibraryTestInitialize.OnTestInitialize(Codeunit::"Integration - Salaries");
 
         if IsInitialized then exit;
 
-        LibraryTestInitialize.OnBeforeTestSuiteInitialize(Codeunit::"Test - Salaries");
+        LibraryTestInitialize.OnBeforeTestSuiteInitialize(Codeunit::"Integration - Salaries");
 
         InitializeSetup();
         InitializeTimeSheetNos();
 
         IsInitialized := true;
         Commit();
-        LibraryTestInitialize.OnAfterTestSuiteInitialize(Codeunit::"Test - Salaries");
+        LibraryTestInitialize.OnAfterTestSuiteInitialize(Codeunit::"Integration - Salaries");
     end;
 }
