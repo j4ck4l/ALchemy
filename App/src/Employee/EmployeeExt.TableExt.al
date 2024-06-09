@@ -179,6 +179,13 @@ tableextension 60100 EmployeeExt extends Employee
                 Rec.TestField(Seniority, Seniority::Manager);
             end;
         }
+
+        field(60112; TimetrackerEmployeeId; Text[10])
+        {
+            Caption = 'Timetracker Employee Id';
+            DataClassification = CustomerContent;
+        }
+
     }
 
     internal procedure CalculateSalary(AtDate: Date) Salary: Record MonthlySalary
@@ -197,4 +204,14 @@ tableextension 60100 EmployeeExt extends Employee
         Page.RunModal(Page::MonthlySalaryPreview, TempMonthlySalary);
     end;
 
+    internal procedure GetWorkHoursProvider(): Interface IWorkHoursProvider
+    var
+        BCWorkHoursProvider: Codeunit BCWorkHoursProvider;
+        TimetrackerWorkHoursProvider: Codeunit TimetrackerWorkHoursProvider;
+    begin
+        if Rec.TimetrackerEmployeeId <> '' then
+            exit(TimetrackerWorkHoursProvider)
+        else
+            exit(BCWorkHoursProvider);
+    end;
 }

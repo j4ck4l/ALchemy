@@ -22,28 +22,15 @@ codeunit 60102 SalaryCalculatorTimesheet implements ISalaryCalculator
 
     procedure CalculateBonus(Employee: Record Employee; Setup: Record SalarySetup; Salary: Decimal; StartingDate: Date; EndingDate: Date) Bonus: Decimal;
     var
-        TimeSheetHeader: Record "Time Sheet Header";
-        TimeSheetLine: Record "Time Sheet Line";
+        WorkHoursProvider: Interface IWorkHoursProvider;
         WorkHours: Decimal;
     begin
         Setup.TestField(MinimumHours);
         Setup.TestField(OvertimeThreshold);
         Employee.TestField("Resource No.");
 
-        TimeSheetHeader.SetRange("Resource No.", Employee."Resource No.");
-        TimeSheetHeader.SetRange("Starting Date", StartingDate, EndingDate);
-        TimeSheetHeader.SetRange("Ending Date", StartingDate, EndingDate);
-        if TimeSheetHeader.FindSet() then
-            repeat
-                TimeSheetLine.Reset();
-                TimeSheetLine.SetRange("Time Sheet No.", TimeSheetHeader."No.");
-                TimeSheetLine.SetRange(Status, TimeSheetLine.Status::Approved);
-                TimeSheetLine.SetAutoCalcFields("Total Quantity");
-                if TimeSheetLine.FindSet() then
-                    repeat
-                        WorkHours += TimeSheetLine."Total Quantity";
-                    until TimeSheetLine.Next() = 0;
-            until TimeSheetHeader.Next() = 0;
+        WorkHoursProvider := Employee.GetWorkHoursProvider();
+        WorkHours := WorkHoursProvider.CalculateHours(Employee, StartingDate, EndingDate);
 
         if WorkHours < Setup.MinimumHours then
             Bonus := -Salary * (1 - WorkHours / Setup.MinimumHours)

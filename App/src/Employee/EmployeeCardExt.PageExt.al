@@ -35,6 +35,17 @@ pageextension 60100 EmployeeCardExt extends "Employee Card"
                     }
                 }
 
+                group(WorksheetSalary)
+                {
+                    Caption = 'Worksheet Salary';
+
+                    field(TimetrackerEmployeeId; Rec.TimetrackerEmployeeId)
+                    {
+                        ApplicationArea = All;
+                        ToolTip = 'Specifies the ID of this employee in the Timetracker cloud system.';
+                    }
+                }
+
                 group(CommissionSalary)
                 {
                     Caption = 'Commission Salary';
@@ -85,6 +96,15 @@ pageextension 60100 EmployeeCardExt extends "Employee Card"
             }
 
         }
+
+        addlast(factboxes)
+        {
+            part("Employee Timetracker Data"; TimetrackerEntriesFactbox)
+            {
+                ApplicationArea = All;
+                SubPageLink = "Employee No." = field("No.");
+            }
+        }
     }
 
     actions
@@ -104,6 +124,23 @@ pageextension 60100 EmployeeCardExt extends "Employee Card"
                 trigger OnAction()
                 begin
                     Rec.PreviewSalary();
+                end;
+            }
+
+            action(GetTimetrackerData)
+            {
+                Caption = 'Get Timetracker Data';
+                Promoted = true;
+                Image = Timesheet;
+                ApplicationArea = All;
+                ToolTip = 'Gets employee''s worksheet data from Timetracker.';
+
+                trigger OnAction()
+                var
+                    TimetrackerProvider: Codeunit TimetrackerWorkHoursProvider;
+                begin
+                    TimetrackerProvider.CalculateHours(Rec, WorkDate(), WorkDate());
+                    CurrPage.Update(false);
                 end;
             }
         }
