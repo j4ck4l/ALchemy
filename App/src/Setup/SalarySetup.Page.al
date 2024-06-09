@@ -47,6 +47,21 @@ page 60102 SalarySetup
                     ToolTip = 'Specifies the yearly increase in percentage';
                 }
             }
+
+            group(Performance)
+            {
+                Caption = 'Performance Calculation';
+
+                field(IncomeAccountNo; Rec.IncomeAccountNo)
+                {
+                    ToolTip = 'Specifies the income account no.';
+                }
+
+                field(ExpenseAccountNo; Rec.ExpenseAccountNo)
+                {
+                    ToolTip = 'Specifies the expense account no.';
+                }
+            }
         }
     }
 

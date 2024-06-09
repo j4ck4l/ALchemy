@@ -34,6 +34,18 @@ table 60100 SalarySetup
         {
             Caption = 'Yearly Incentive %';
         }
+
+        field(6; IncomeAccountNo; Code[20])
+        {
+            Caption = 'Revenue Account No.';
+            TableRelation = "G/L Account" where("Account Type" = const(Total));
+        }
+
+        field(7; ExpenseAccountNo; Code[20])
+        {
+            Caption = 'Expense Account No.';
+            TableRelation = "G/L Account" where("Account Type" = const(Total));
+        }
     }
 
     keys

@@ -141,6 +141,20 @@ tableextension 60100 EmployeeExt extends Employee
             end;
         }
 
+        field(60109; PerformanceBonusPct; Decimal)
+        {
+            Caption = 'Performance Bonus %';
+            DataClassification = CustomerContent;
+            MinValue = 0;
+
+            trigger OnValidate()
+            begin
+                Rec.TestField(SalaryType, SalaryType::Performance);
+                if Rec.Seniority in [Seniority::Trainee, Seniority::Executive] then
+                    Rec.FieldError(Seniority);
+            end;
+        }
+
         field(60110; TeamBonusPct; Decimal)
         {
             Caption = 'Team Bonus %';
@@ -180,7 +194,7 @@ tableextension 60100 EmployeeExt extends Employee
     begin
         TempMonthlySalary := Rec.CalculateSalary(WorkDate());
         TempMonthlySalary.Insert();
-        Page.RunModal(Page::MonhtlySalaryPreview, TempMonthlySalary);
+        Page.RunModal(Page::MonthlySalaryPreview, TempMonthlySalary);
     end;
 
 }

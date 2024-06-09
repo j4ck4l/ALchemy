@@ -70,6 +70,18 @@ pageextension 60100 EmployeeCardExt extends "Employee Card"
                         ToolTip = 'Specifies the maximum malus for the employee.';
                     }
                 }
+
+                group(PerformanceSalary)
+                {
+                    Caption = 'Performance Salary';
+                    Editable = Rec.SalaryType = SalaryType::Performance;
+
+                    field(PerformanceBonusPct; Rec.PerformanceBonusPct)
+                    {
+                        ApplicationArea = All;
+                        ToolTip = 'Specifies the performance bonus percentage for the employee.';
+                    }
+                }
             }
 
         }

@@ -1,6 +1,6 @@
 namespace ALchemy;
 
-page 60107 MonhtlySalaryPreview
+page 60107 MonthlySalaryPreview
 {
     Caption = 'Salary Preview';
     SourceTable = MonthlySalary;
